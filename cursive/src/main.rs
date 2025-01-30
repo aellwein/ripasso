@@ -984,18 +984,18 @@ fn view_recipients_for_many_dirs(
 
     let ll = LinearLayout::new(Orientation::Vertical).child(d).child(
         LinearLayout::new(Orientation::Horizontal)
-            .child(TextView::new(CATALOG.gettext("ins: Add | ")))
-            .child(TextView::new(CATALOG.gettext("del: Remove"))),
+            .child(TextView::new(CATALOG.gettext("ctrl-a: Add | ")))
+            .child(TextView::new(CATALOG.gettext("ctrl-r: Remove"))),
     );
 
     let store2 = store.clone();
     let config_path = config_path.to_path_buf();
 
     let recipients_event = OnEventView::new(ll)
-        .on_event(Key::Del, move |ui: &mut Cursive| {
+        .on_event(Event::CtrlChar('r'), move |ui: &mut Cursive| {
             delete_recipient_verification(ui, store.clone())
         })
-        .on_event(Key::Ins, move |ui: &mut Cursive| {
+        .on_event(Event::CtrlChar('a'), move |ui: &mut Cursive| {
             add_recipient_dialog(ui, store2.clone(), &config_path)
         })
         .on_event(Key::Esc, |s| {
@@ -1050,18 +1050,18 @@ fn view_recipients_for_dir(
 
     let ll = LinearLayout::new(Orientation::Vertical).child(d).child(
         LinearLayout::new(Orientation::Horizontal)
-            .child(TextView::new(CATALOG.gettext("ins: Add | ")))
-            .child(TextView::new(CATALOG.gettext("del: Remove"))),
+            .child(TextView::new(CATALOG.gettext("ctrl-a: Add | ")))
+            .child(TextView::new(CATALOG.gettext("ctrl-r: Remove"))),
     );
 
     let store2 = store.clone();
     let config_path = config_path.to_path_buf();
 
     let recipients_event = OnEventView::new(ll)
-        .on_event(Key::Del, move |ui: &mut Cursive| {
+        .on_event(Event::CtrlChar('r'), move |ui: &mut Cursive| {
             delete_recipient_verification(ui, store.clone())
         })
-        .on_event(Key::Ins, move |ui: &mut Cursive| {
+        .on_event(Event::CtrlChar('a'), move |ui: &mut Cursive| {
             add_recipient_dialog(ui, store2.clone(), &config_path)
         })
         .on_event(Key::Esc, |s| {
@@ -1947,8 +1947,8 @@ fn show_manage_config_dialog(
     let ll = LinearLayout::new(Orientation::Vertical).child(d).child(
         LinearLayout::new(Orientation::Horizontal)
             .child(TextView::new(CATALOG.gettext("ctrl-e: Edit | ")))
-            .child(TextView::new(CATALOG.gettext("ins: Add | ")))
-            .child(TextView::new(CATALOG.gettext("del: Remove"))),
+            .child(TextView::new(CATALOG.gettext("ctrl-a: Add | ")))
+            .child(TextView::new(CATALOG.gettext("ctrl-r: Remove"))),
     );
 
     let stores2 = stores.clone();
@@ -1966,13 +1966,13 @@ fn show_manage_config_dialog(
                 helpers::errorbox(ui, &err);
             }
         })
-        .on_event(Key::Del, move |ui: &mut Cursive| {
+        .on_event(Event::CtrlChar('r'), move |ui: &mut Cursive| {
             let res = delete_store_from_config(ui, stores2.clone(), &config_file_location2);
             if let Err(err) = res {
                 helpers::errorbox(ui, &err);
             }
         })
-        .on_event(Key::Ins, move |ui: &mut Cursive| {
+        .on_event(Event::CtrlChar('a'), move |ui: &mut Cursive| {
             let res = add_store_to_config(ui, stores3.clone(), &config_file_location3, &home2);
             if let Err(err) = res {
                 helpers::errorbox(ui, &err);
@@ -2188,7 +2188,7 @@ fn main() -> Result<()> {
             do_git_push(ui, store.clone());
         }
     });
-    ui.add_global_callback(Event::Key(Key::Ins), {
+    ui.add_global_callback(Event::CtrlChar('a'), {
         let store = store.clone();
         move |ui: &mut Cursive| {
             create(ui, store.clone());
@@ -2269,7 +2269,7 @@ fn main() -> Result<()> {
                     do_show_file_history(ui, store.clone());
                 }
             })
-            .leaf(CATALOG.gettext("Create (ins) "), {
+            .leaf(CATALOG.gettext("Create (ctrl-a) "), {
                 let store = store.clone();
                 move |ui: &mut Cursive| {
                     create(ui, store.clone());
